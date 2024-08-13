@@ -30,7 +30,7 @@ const SinglePostPage = () => {
             <span className={styles.detailTitle}>Published</span>
             <span className={styles.detailValue}>01.01.2024</span>
           </div>
-          </div>
+        </div>
         <div className={styles.content}>
           Nostrud labore laborum excepteur laborum tempor Lorem ullamco duis
           laboris consequat et. Nostrud pariatur reprehenderit incididunt irure
