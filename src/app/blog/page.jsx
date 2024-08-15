@@ -1,7 +1,9 @@
 import PostCard from "@/components/postCard/postCard";
 import styles from "./blog.module.css";
 
-const BlogPage = () => {
+const BlogPage = ({ params, searchParams }) => {
+  console.log(params); // {}
+  console.log(searchParams); // search querys
   return (
     <div className={styles.container}>
       <div className={styles.post}>
