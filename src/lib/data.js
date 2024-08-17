@@ -1,8 +1,8 @@
-// TEMPORARY DATA
-
 import { Post, User } from "./models";
 import { connectToDb } from "./utils";
+import { unstable_noStore as noStore} from "next/cache";
 
+// TEMPORARY DATA
 // const users = [
 //   { id: 1, username: "John" },
 //   { id: 2, username: "Jane" },
@@ -38,6 +38,7 @@ export const getPost = async (slug) => {
 };
 
 export const getUser = async (id) => {
+  noStore();
   try {
     connectToDb();
     const user = await User.findById({ _id: id });
