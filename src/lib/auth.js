@@ -24,7 +24,7 @@ const login = async (credentials) => {
 
     return user;
   } catch (err) {
-    console.log(err);
+    console.log("catched by auth#login", err);
     throw new Error("Failed to login!");
   }
 };
