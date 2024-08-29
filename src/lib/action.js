@@ -105,12 +105,15 @@ export const login = async (previousState, formData) => {
 
   try {
     await signIn("credentials", { username, password });
+    // signIn will redirect to the homepage once authentication is complete.
+    // When redirect() is called, it intentionally throws a NEXT_REDIRECT error.
+    // If placed inside a try-catch block, the NEXT_REDIRECT error will be caught, interrupting the redirect process.
   } catch (err) {
     console.log("catched by action#login", err);
-    
+
     if (err.message.includes("CredentialsSignin")) {
       return { error: "Invalid username or password" };
     }
-    return { error: "Something went wrong!" };
+    throw err; // let NEXT_REDIRECT go
   }
 };
