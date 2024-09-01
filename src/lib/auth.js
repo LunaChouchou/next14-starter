@@ -3,7 +3,8 @@ import GitHub from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { connectToDb } from "./utils";
 import { User } from "./models";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
+import { authConfig } from "./auth.config";
 
 const login = async (credentials) => {
   try {
@@ -35,6 +36,7 @@ export const {
   signIn,
   signOut,
 } = NextAuth({
+  ...authConfig, // 展开authConfig内所有配置，可以从auth.js调用authConfig内定义的配置，注意同名配置（如providers, callbacks）会被后来的覆盖
   providers: [
     GitHub({
       clientId: process.env.GITHUB_ID,
@@ -55,7 +57,6 @@ export const {
   callbacks: {
     // 取得身份验证信息后执行
     async signIn({ user, account, profile }) {
-      console.log(user, account, profile);
       if (account.provider === "github") {
         connectToDb();
         try {
@@ -77,5 +78,6 @@ export const {
       }
       return true; // 身份验证成功，重定向回应用
     },
+    ...authConfig.callbacks, // 重新添加被覆盖的回调函数
   },
 });

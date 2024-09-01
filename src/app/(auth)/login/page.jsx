@@ -3,6 +3,8 @@ import { handleGithubLogin } from "@/lib/action";
 import styles from "./login.module.css";
 
 const LoginPage = () => {
+
+  // auth?.user?.isAdmin && router.push("/"); // auth means session
   return (
     <div className={styles.container}>
       <div className={styles.wrapper}>
