@@ -6,14 +6,14 @@ import { connectToDb } from "./utils";
 import { signIn, signOut } from "@/lib/auth";
 import bcrypt from "bcryptjs";
 
-export const addPost = async (formData) => {
+export const addPost = async (PrevState, formData) => {
   // "use server"
 
   //   const title = formData.get("title");
   //   const desc = formData.get("desc");
   //   const slug = formData.get("slug");
 
-  const { title, desc, slug, userId } = Object.fromEntries(formData);
+  const { title, desc, slug, userId, img } = Object.fromEntries(formData);
 
   try {
     connectToDb();
@@ -22,10 +22,12 @@ export const addPost = async (formData) => {
       desc,
       slug,
       userId,
+      img,
     });
 
     await newPost.save();
     revalidatePath("/blog"); // fetch new data
+    revalidatePath("/admin");
     console.log("saved to db");
   } catch (err) {
     console.log(err);
@@ -42,6 +44,45 @@ export const deletePost = async (formData) => {
     await Post.findByIdAndDelete(id);
     console.log("deleted from db");
     revalidatePath("/blog");
+    revalidatePath("/admin");
+  } catch (err) {
+    console.log(err);
+    return { err: "Something went wrong!" };
+  }
+};
+
+export const addUser = async (PrevState,formData) => {
+  const { username, email, password, img, isAdmin } = Object.fromEntries(formData);
+
+  try {
+    connectToDb();
+    const newUser = new User({
+      username,
+      email,
+      password,
+      img,
+      isAdmin,
+    });
+
+    await newUser.save();
+    revalidatePath("/admin"); // fetch new data
+    console.log("saved to db");
+  } catch (err) {
+    console.log(err);
+    return { err: "Something went wrong!" };
+  }
+};
+
+export const deleteUser = async (formData) => {
+  const { id } = Object.fromEntries(formData);
+
+  try {
+    connectToDb();
+
+    await Post.deleteMany({ userId: id });
+    await User.findByIdAndDelete(id);
+    console.log("deleted from db");
+    revalidatePath("/admin");
   } catch (err) {
     console.log(err);
     return { err: "Something went wrong!" };
